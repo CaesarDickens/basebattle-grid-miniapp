@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { formatEther, parseEther } from "viem";
 import { useAccount, usePublicClient, useReadContracts, useWriteContract } from "wagmi";
 import { CONTRACT_ADDRESS, GAME_ABI } from "@/lib/contract";
+import { DATA_SUFFIX } from "@/lib/wagmi";
 import { trackTransaction } from "@/utils/track";
 
 const actions = [
@@ -171,6 +172,7 @@ export function ArenaClient() {
                   address: CONTRACT_ADDRESS,
                   abi: GAME_ABI,
                   functionName: "join",
+                  dataSuffix: DATA_SUFFIX,
                   value: parseEther(stake),
                 })
               }
@@ -188,6 +190,7 @@ export function ArenaClient() {
                   abi: GAME_ABI,
                   functionName: "act",
                   args: [selectedAction],
+                  dataSuffix: DATA_SUFFIX,
                 })
               }
             >
@@ -203,6 +206,7 @@ export function ArenaClient() {
                   address: CONTRACT_ADDRESS,
                   abi: GAME_ABI,
                   functionName: "resolve",
+                  dataSuffix: DATA_SUFFIX,
                 })
               }
             >
@@ -218,6 +222,7 @@ export function ArenaClient() {
                   address: CONTRACT_ADDRESS,
                   abi: GAME_ABI,
                   functionName: "claim",
+                  dataSuffix: DATA_SUFFIX,
                 })
               }
             >
@@ -270,7 +275,7 @@ export function ArenaClient() {
           </div>
           <div className="soft-panel">
             <strong>ERC-8021 Builder Code</strong>
-            <p>The wagmi config now uses the live data suffix for Base attribution.</p>
+            <p>The live builder code suffix is attached onchain for Base attribution.</p>
           </div>
         </div>
       </article>

@@ -1,13 +1,25 @@
-import { getDefaultConfig } from "@rainbow-me/rainbowkit";
+import { createConfig, http } from "wagmi";
 import { base } from "wagmi/chains";
-import { DATA_SUFFIX } from "@/lib/wagmi";
+import { coinbaseWallet, injected } from "wagmi/connectors";
 
-export const wagmiConfig = getDefaultConfig({
-  appName: "BaseBattle Grid",
-  projectId:
-    process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID ||
-    "basebattle-grid-demo-project-id",
+export const wagmiConfig = createConfig({
   chains: [base],
+  connectors: [
+    injected(),
+    coinbaseWallet({
+      appName: "BaseBattle Grid",
+      preference: "all",
+    }),
+  ],
   ssr: true,
-  dataSuffix: DATA_SUFFIX,
+  transports: {
+    [base.id]: http(),
+  },
+  multiInjectedProviderDiscovery: true,
 });
+
+declare module "wagmi" {
+  interface Register {
+    config: typeof wagmiConfig;
+  }
+}

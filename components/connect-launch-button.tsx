@@ -1,55 +1,65 @@
 "use client";
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useMemo } from "react";
+import { useAccount, useConnect, useDisconnect, useSwitchChain } from "wagmi";
+import { base } from "wagmi/chains";
 
 export function ConnectLaunchButton() {
-  return (
-    <ConnectButton.Custom>
-      {({
-        account,
-        chain,
-        mounted,
-        openAccountModal,
-        openChainModal,
-        openConnectModal,
-      }) => {
-        const ready = mounted;
-        const connected = ready && account && chain;
+  const { address, chain, isConnected } = useAccount();
+  const { connect, connectors, isPending } = useConnect();
+  const { disconnect } = useDisconnect();
+  const { switchChainAsync, isPending: isSwitching } = useSwitchChain();
 
-        if (!connected) {
-          return (
-            <button
-              className="bubble-button bubble-button--accent"
-              onClick={openConnectModal}
-              type="button"
-            >
-              Start Game
-            </button>
-          );
-        }
+  const supportedConnectors = useMemo(() => connectors, [connectors]);
 
-        if (chain.unsupported) {
-          return (
-            <button
-              className="bubble-button bubble-button--ghost"
-              onClick={openChainModal}
-              type="button"
-            >
-              Switch to Base
-            </button>
-          );
-        }
-
-        return (
+  if (!isConnected) {
+    return (
+      <div className="wallet-menu">
+        {supportedConnectors.map((connector) => (
           <button
-            className="bubble-button bubble-button--primary"
-            onClick={openAccountModal}
+            key={connector.uid}
+            className="bubble-button bubble-button--accent"
+            disabled={isPending}
+            onClick={() => connect({ connector })}
             type="button"
           >
-            {account.displayName}
+            {isPending ? "Connecting..." : `Connect ${labelFor(connector.id)}`}
           </button>
-        );
-      }}
-    </ConnectButton.Custom>
+        ))}
+      </div>
+    );
+  }
+
+  if (chain?.id !== base.id) {
+    return (
+      <button
+        className="bubble-button bubble-button--ghost"
+        disabled={isSwitching}
+        onClick={() => switchChainAsync({ chainId: base.id })}
+        type="button"
+      >
+        {isSwitching ? "Switching..." : "Switch to Base"}
+      </button>
+    );
+  }
+
+  return (
+    <button
+      className="bubble-button bubble-button--primary"
+      onClick={() => disconnect()}
+      type="button"
+      title="Disconnect wallet"
+    >
+      {address ? shortenAddress(address) : "Connected"}
+    </button>
   );
+}
+
+function labelFor(id: string) {
+  if (id === "coinbaseWalletSDK" || id === "coinbaseWallet") return "Coinbase Wallet";
+  return "Browser Wallet";
+}
+
+function shortenAddress(address: string) {
+  return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
