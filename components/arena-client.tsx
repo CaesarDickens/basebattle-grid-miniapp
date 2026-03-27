@@ -10,22 +10,22 @@ const actions = [
   {
     id: 1,
     label: "Attack",
-    title: "猛攻格",
-    description: "赌一次高风险突进，成功有更高奖励。",
-    estimate: "+15 / 可能出局",
+    title: "Strike Tile",
+    description: "Take the highest-risk path for the biggest upside.",
+    estimate: "+15 / KO risk",
   },
   {
     id: 2,
     label: "Defend",
-    title: "护盾格",
-    description: "稳健防守，拿固定小额奖励。",
+    title: "Shield Tile",
+    description: "Play safely and secure a smaller fixed reward.",
     estimate: "+5",
   },
   {
     id: 3,
     label: "Farm",
-    title: "补给格",
-    description: "轻松发育，获得稳定收益。",
+    title: "Supply Tile",
+    description: "Choose the steadiest route and grow with less drama.",
     estimate: "+8",
   },
 ];
@@ -40,7 +40,7 @@ export function ArenaClient() {
   const [stake, setStake] = useState("0.00001");
   const [feedback, setFeedback] = useState<FeedbackState>({
     kind: "idle",
-    message: "连接钱包后就可以出战。",
+    message: "Connect your wallet to start the match.",
   });
   const { address, isConnected } = useAccount();
   const publicClient = usePublicClient();
@@ -87,21 +87,21 @@ export function ArenaClient() {
 
   async function runTransaction(label: string, config: any) {
     if (!address || !publicClient) {
-      setFeedback({ kind: "error", message: "请先连接钱包。" });
+      setFeedback({ kind: "error", message: "Please connect your wallet first." });
       return;
     }
 
     try {
-      setFeedback({ kind: "working", message: `${label}提交中，请在钱包里确认。` });
+      setFeedback({ kind: "working", message: `${label} submitted. Confirm it in your wallet.` });
       const hash = await writeContractAsync(config);
-      setFeedback({ kind: "working", message: `${label}已广播，等待链上确认。` });
+      setFeedback({ kind: "working", message: `${label} sent. Waiting for onchain confirmation.` });
       await publicClient.waitForTransactionReceipt({ hash });
       trackTransaction("app-001", "BaseBattle Grid", address, hash);
-      setFeedback({ kind: "success", message: `${label}成功，交易哈希：${hash}` });
+      setFeedback({ kind: "success", message: `${label} succeeded. Tx hash: ${hash}` });
       await refetch();
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : `${label}失败，请稍后重试。`;
+        error instanceof Error ? error.message : `${label} failed. Please try again.`;
       setFeedback({ kind: "error", message });
     }
   }
@@ -110,10 +110,11 @@ export function ArenaClient() {
     <section className="arena-grid">
       <article className="panel-card">
         <div className="board-card">
-          <span className="card-tag">棋盘选择</span>
-          <h2>出战动作</h2>
+          <span className="card-tag">Board Selection</span>
+          <h2>Choose your move</h2>
           <p className="muted">
-            选中一个格子作为本回合行动。按钮文案已替换为更游戏化的“开始对局 / 出战确认”。
+            Pick one tile for this round. The action copy stays game-like instead
+            of using generic transaction wording.
           </p>
 
           <div className="arena-board">
@@ -137,7 +138,7 @@ export function ArenaClient() {
 
           <div className="slider-wrap">
             <label htmlFor="stake">
-              <strong>下注额度（ETH）</strong>
+              <strong>Stake Size (ETH)</strong>
             </label>
             <input
               id="stake"
@@ -156,7 +157,7 @@ export function ArenaClient() {
               onChange={(event) => setStake(event.target.value)}
             />
             <span className="status-pill">
-              可能赢得奖励：{stake} ETH + {selectedActionMeta.estimate}
+              Potential outcome: {stake} ETH + {selectedActionMeta.estimate}
             </span>
           </div>
 
@@ -166,7 +167,7 @@ export function ArenaClient() {
               className="bubble-button bubble-button--primary"
               disabled={!isConnected}
               onClick={() =>
-                runTransaction("开始对局", {
+                runTransaction("Start Match", {
                   address: CONTRACT_ADDRESS,
                   abi: GAME_ABI,
                   functionName: "join",
@@ -174,7 +175,7 @@ export function ArenaClient() {
                 })
               }
             >
-              开始对局
+              Start Match
             </button>
 
             <button
@@ -182,7 +183,7 @@ export function ArenaClient() {
               className="bubble-button bubble-button--accent"
               disabled={!isConnected}
               onClick={() =>
-                runTransaction("出战确认", {
+                runTransaction("Confirm Move", {
                   address: CONTRACT_ADDRESS,
                   abi: GAME_ABI,
                   functionName: "act",
@@ -190,7 +191,7 @@ export function ArenaClient() {
                 })
               }
             >
-              出战确认
+              Confirm Move
             </button>
 
             <button
@@ -198,14 +199,14 @@ export function ArenaClient() {
               className="bubble-button bubble-button--ghost"
               disabled={!isConnected}
               onClick={() =>
-                runTransaction("战局结算", {
+                runTransaction("Resolve Round", {
                   address: CONTRACT_ADDRESS,
                   abi: GAME_ABI,
                   functionName: "resolve",
                 })
               }
             >
-              战局结算
+              Resolve Round
             </button>
 
             <button
@@ -213,14 +214,14 @@ export function ArenaClient() {
               className="bubble-button bubble-button--ghost"
               disabled={!isConnected}
               onClick={() =>
-                runTransaction("领取奖励", {
+                runTransaction("Claim Rewards", {
                   address: CONTRACT_ADDRESS,
                   abi: GAME_ABI,
                   functionName: "claim",
                 })
               }
             >
-              领取奖励
+              Claim Rewards
             </button>
           </div>
 
@@ -229,47 +230,47 @@ export function ArenaClient() {
       </article>
 
       <article className="panel-card">
-        <span className="card-tag card-tag--orange">实时状态</span>
-        <h2>链上战报</h2>
+        <span className="card-tag card-tag--orange">Live Status</span>
+        <h2>Onchain battle report</h2>
         <div className="info-grid">
           <div className="keyline">
-            <span>当前回合</span>
-            <span>{currentRound}</span>
+            <span>Current Round</span>
+            <span>{currentRound.toString()}</span>
           </div>
           <div className="keyline">
-            <span>入场费</span>
+            <span>Entry Fee</span>
             <span>{formatEther(entryFee)} ETH</span>
           </div>
           <div className="keyline">
-            <span>奖池</span>
+            <span>Prize Pool</span>
             <span>{formatEther(pool)} ETH</span>
           </div>
           <div className="keyline">
-            <span>玩家余额</span>
+            <span>Player Balance</span>
             <span>{player ? player.balance.toString() : "--"}</span>
           </div>
           <div className="keyline">
-            <span>存活状态</span>
+            <span>Status</span>
             <span>{player?.alive ? "Alive" : "Waiting / Out"}</span>
           </div>
           <div className="keyline">
-            <span>上次动作</span>
+            <span>Last Action</span>
             <span>{player?.action?.toString() ?? "0"}</span>
           </div>
         </div>
 
         <div className="stack-list">
           <div className="soft-panel">
-            <strong>主交易路径</strong>
+            <strong>Main flow</strong>
             <p>Join → Act → Resolve → Claim</p>
           </div>
           <div className="soft-panel">
-            <strong>交易归因</strong>
-            <p>所有成功交易会触发 `trackTransaction(app-001, BaseBattle Grid, address, txHash)`。</p>
+            <strong>Transaction tracking</strong>
+            <p>Every successful write calls trackTransaction with the live wallet and tx hash.</p>
           </div>
           <div className="soft-panel">
-            <strong>8021 Builder Code</strong>
-            <p>已在 wagmi 配置中预留 dataSuffix，等待你提供真实 Builder Code 以完成最终验证。</p>
+            <strong>ERC-8021 Builder Code</strong>
+            <p>The wagmi config now uses the live data suffix for Base attribution.</p>
           </div>
         </div>
       </article>

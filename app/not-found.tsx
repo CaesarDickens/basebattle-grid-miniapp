@@ -6,14 +6,14 @@ export default function NotFound() {
       <section className="hero-card">
         <div className="hero-copy">
           <span className="eyebrow">Route Missing</span>
-          <h1>地图走丢了</h1>
-          <p>这个棋盘格暂时还没有开放。回到主城或战场继续游戏即可。</p>
+          <h1>This tile is hidden</h1>
+          <p>The page you tried to visit is not part of the current board. Jump back into the map below.</p>
           <div className="hero-actions">
             <Link href="/" className="bubble-button bubble-button--primary">
-              返回主城
+              Return Home
             </Link>
             <Link href="/arena" className="bubble-button bubble-button--ghost">
-              进入战场
+              Open Arena
             </Link>
           </div>
         </div>

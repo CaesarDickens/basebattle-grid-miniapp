@@ -5,10 +5,10 @@ import { usePathname } from "next/navigation";
 import { ConnectLaunchButton } from "@/components/connect-launch-button";
 
 const links = [
-  { href: "/", label: "主城" },
-  { href: "/arena", label: "战场" },
-  { href: "/rewards", label: "奖励" },
-  { href: "/intel", label: "情报" },
+  { href: "/", label: "Home" },
+  { href: "/arena", label: "Arena" },
+  { href: "/rewards", label: "Rewards" },
+  { href: "/intel", label: "Intel" },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -18,10 +18,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="shell">
       <header className="topbar">
         <div className="brand">
-          <div className="brand-mark">♞</div>
+          <div className="brand-mark">B</div>
           <div className="brand-copy">
             <strong>BaseBattle Grid</strong>
-            <span>On-chain Strategy PvP Game</span>
+            <span>Onchain Strategy PvP Game</span>
           </div>
         </div>
 

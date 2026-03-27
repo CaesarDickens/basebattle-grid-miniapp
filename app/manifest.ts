@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "BaseBattle Grid",
     short_name: "Battle Grid",
-    description: "链上布阵对战游戏，下注参与胜负博弈赢取奖励。",
+    description: "An onchain strategy battle game where players stake, plan, and compete for rewards.",
     start_url: "/",
     display: "standalone",
     background_color: "#FFF8E7",

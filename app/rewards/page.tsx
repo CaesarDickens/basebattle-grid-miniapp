@@ -1,23 +1,23 @@
 const steps = [
-  "连接钱包并支付入场费。",
-  "在棋盘上选择 Attack / Defend / Farm。",
-  "等待或推进到新回合后执行 Resolve。",
-  "若角色淘汰，则可执行 Claim 提现奖励。",
+  "Connect your wallet and pay the entry fee.",
+  "Choose Attack, Defend, or Farm on the board.",
+  "Wait for the next round, then run Resolve.",
+  "If your character is out, use Claim to withdraw rewards.",
 ];
 
 export default function RewardsPage() {
   return (
     <main className="page-shell">
       <section className="page-header">
-        <span className="eyebrow">成长路线</span>
-        <h1>奖励与策略</h1>
-        <p>不是传统炒币仪表盘，而是一张带路线感与收益预期的桌游说明书。</p>
+        <span className="eyebrow">Progress Path</span>
+        <h1>Rewards and Strategy</h1>
+        <p>This page reads like a playful board-game guide, not a generic crypto dashboard.</p>
       </section>
 
       <section className="content-grid">
         <article className="game-card">
-          <span className="card-tag">对局节奏</span>
-          <h2>四步完成一轮出战</h2>
+          <span className="card-tag">Match Rhythm</span>
+          <h2>Finish one battle in four steps</h2>
           <div className="stack-list">
             {steps.map((step, index) => (
               <div key={step} className="soft-panel">
@@ -29,13 +29,17 @@ export default function RewardsPage() {
         </article>
 
         <article className="game-card">
-          <span className="card-tag card-tag--orange">策略建议</span>
-          <h2>适合新手的开局</h2>
-          <p>初次体验更推荐先用 Farm 感受回合节奏，再在熟悉后切换 Attack。Defend 适合作为中途保守过渡。</p>
+          <span className="card-tag card-tag--orange">Strategy Tips</span>
+          <h2>A friendly opening route</h2>
+          <p>
+            New players should start with Farm to feel the pace of each round,
+            then mix in Attack once the flow is familiar. Defend works well as a
+            safer bridge between riskier turns.
+          </p>
           <div className="strategy-grid">
-            <div className="chip chip-blue">稳健发育</div>
-            <div className="chip chip-orange">冲刺爆发</div>
-            <div className="chip chip-cream">回合观察</div>
+            <div className="chip chip-blue">Steady Growth</div>
+            <div className="chip chip-orange">Burst Push</div>
+            <div className="chip chip-cream">Round Watch</div>
           </div>
         </article>
       </section>

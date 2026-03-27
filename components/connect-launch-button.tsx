@@ -23,7 +23,7 @@ export function ConnectLaunchButton() {
               onClick={openConnectModal}
               type="button"
             >
-              游戏开始
+              Start Game
             </button>
           );
         }
@@ -35,7 +35,7 @@ export function ConnectLaunchButton() {
               onClick={openChainModal}
               type="button"
             >
-              切换到 Base
+              Switch to Base
             </button>
           );
         }

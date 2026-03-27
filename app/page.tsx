@@ -2,9 +2,9 @@ import Link from "next/link";
 import { StatBubble } from "@/components/stat-bubble";
 
 const highlights = [
-  { label: "玩法类型", value: "Commit-Reveal PvP" },
-  { label: "入场门槛", value: "0.00001 ETH+" },
-  { label: "合约网络", value: "Base Mainnet" },
+  { label: "Mode", value: "Commit-Reveal PvP" },
+  { label: "Entry", value: "0.00001 ETH+" },
+  { label: "Network", value: "Base Mainnet" },
 ];
 
 export default function HomePage() {
@@ -15,14 +15,16 @@ export default function HomePage() {
           <span className="eyebrow">Base Mini App · GameFi</span>
           <h1>BaseBattle Grid</h1>
           <p>
-            在糖果棋盘上布阵、选择攻守农三种行动，并把每一步都写进 Base 链。每次出战都是一次轻策略与运气并存的桌游对决。
+            Build your plan on a candy-colored board, choose between attack,
+            defense, or farming, and record every move on Base. Every match feels
+            like a playful strategy board game with real onchain stakes.
           </p>
           <div className="hero-actions">
             <Link href="/arena" className="bubble-button bubble-button--primary">
-              进入战场
+              Enter Arena
             </Link>
             <Link href="/intel" className="bubble-button bubble-button--ghost">
-              查看规则
+              View Rules
             </Link>
           </div>
         </div>
@@ -30,7 +32,7 @@ export default function HomePage() {
         <div className="board-preview" aria-hidden="true">
           {Array.from({ length: 9 }).map((_, index) => (
             <div key={index} className={`tile tile-${index % 3}`}>
-              <span>{["⚔", "🛡", "⭐"][index % 3]}</span>
+              <span>{["A", "D", "F"][index % 3]}</span>
             </div>
           ))}
         </div>
@@ -44,20 +46,27 @@ export default function HomePage() {
 
       <section className="content-grid">
         <article className="game-card">
-          <span className="card-tag">游戏主循环</span>
-          <h2>先入场，再布阵，随后结算</h2>
-          <p>入场后可在每回合选择攻击、防守或发育。攻击风险最高，发育最稳定，防守更像稳健过渡。</p>
+          <span className="card-tag">Core Loop</span>
+          <h2>Join, plan, resolve, and collect</h2>
+          <p>
+            After joining the game, each round lets you choose Attack, Defend, or
+            Farm. Attack is the swingiest line, Farm is the steadiest route, and
+            Defend helps you slow the pace down.
+          </p>
           <Link href="/arena" className="text-link">
-            去体验主交易路径
+            Try the main flow
           </Link>
         </article>
 
         <article className="game-card">
-          <span className="card-tag card-tag--orange">合约情报</span>
-          <h2>透明链上规则</h2>
-          <p>已接入合约地址、交易归因埋点与 Base attribution 结构，后续只需替换 Builder Code 真值即可完成最终验证。</p>
+          <span className="card-tag card-tag--orange">Contract Intel</span>
+          <h2>Transparent onchain rules</h2>
+          <p>
+            The contract address, transaction tracking, and Base attribution
+            wiring are all live, so gameplay and attribution stay verifiable.
+          </p>
           <Link href="/intel" className="text-link">
-            查看合约与 metadata
+            Inspect metadata
           </Link>
         </article>
       </section>
